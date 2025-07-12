@@ -30,3 +30,5 @@ api_key/*
 
 # But keep the folder itself (Git doesn't track empty folders, so add a placeholder)
 !api_key/.gitkeep
+
+.local/
