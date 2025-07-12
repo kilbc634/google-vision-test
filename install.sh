@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # 建立 .local 資料夾（如果不存在）
 mkdir -p .local

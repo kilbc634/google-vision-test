@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 if [ -z "$1" ]; then
   echo "❌ 請指定要執行的 Python 檔案，例如：./run.sh test.py"
