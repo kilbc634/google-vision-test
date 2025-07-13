@@ -2,6 +2,7 @@ import configparser
 from ahk import AHK
 import mss
 from PIL import Image
+import requests
 
 # 初始化 AHK（手動指定 AutoHotkey.exe 路徑）
 Ahk = AHK(executable_path='C:\\Program Files\\AutoHotkey\\AutoHotkey.exe')
@@ -31,6 +32,16 @@ def on_f2_hotkey():
     print("[*] F2 被按下，開始截圖...")
     region = read_capture_region()
     capture_screen(region)
+
+    api_url = "http://tsukumonet.ddns.net:19862/upload"
+    with open("temp.png", "rb") as img_file:
+        files = {'file': ("temp.png", img_file, "image/png")}
+        try:
+            response = requests.post(api_url, files=files)
+            print(f"[→] API 回應狀態：{response.status_code}")
+            print(f"[→] API 回應內容：{response.text}")
+        except Exception as e:
+            print(f"[!] 傳送圖片失敗：{e}")
 
 # 註冊熱鍵
 Ahk.add_hotkey('F2', callback=on_f2_hotkey)
