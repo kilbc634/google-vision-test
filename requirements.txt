@@ -1,2 +1,3 @@
 google-cloud-vision
 opencv-python-headless
+flask

@@ -24,6 +24,7 @@ def extract_text(image_path):
 
     return texts[0].description.strip()
 
-# 範例呼叫
-text = extract_text("image/4a5s6d.png")
-print(text)
+if __name__ == "__main__":
+    # 範例呼叫
+    text = extract_text("test_image/7786a4sd.png")
+    print(text)

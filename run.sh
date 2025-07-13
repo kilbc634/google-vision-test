@@ -10,5 +10,6 @@ SCRIPT="$1"
 docker run --rm \
   -v "$PWD":/app \
   -w /app \
+  -p 19862:19862 \
   python:3.8.10-slim \
   bash -c "PYTHONPATH=/app/.local python $SCRIPT"
