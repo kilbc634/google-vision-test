@@ -15,8 +15,13 @@ def upload_image():
     if file.filename == '':
         return jsonify({"error": "Empty filename"}), 400
 
-    if os.path.exists("pending.png"):
-        return jsonify({"error": "pending.png already exists"}), 409
+    try:
+        os.remove("pending.png")
+    except FileNotFoundError:
+        pass
+
+    # if os.path.exists("pending.png"):
+    #     return jsonify({"error": "pending.png already exists"}), 409
 
     # 儲存圖片
     file.save("pending.png")
