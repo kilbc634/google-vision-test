@@ -3,9 +3,14 @@ from ahk import AHK
 import mss
 from PIL import Image
 import requests
+import subprocess
+import signal
+import os
+import sys
 
 # 初始化 AHK（手動指定 AutoHotkey.exe 路徑）
-Ahk = AHK(executable_path='C:\\Program Files\\AutoHotkey\\AutoHotkey.exe')
+ahk_exe = 'C:\\Program Files\\AutoHotkey\\AutoHotkey.exe'
+Ahk = AHK(executable_path=ahk_exe)
 
 # 讀取截圖區域
 def read_capture_region(config_path="config.ini"):
@@ -45,8 +50,28 @@ def on_f2_hotkey():
 
 # 註冊熱鍵
 Ahk.add_hotkey('F2', callback=on_f2_hotkey)
+Ahk.add_hotkey('!F2', callback=on_f2_hotkey)
 
 if __name__ == "__main__":
+    # 啟動 capture_setting.ahk 為獨立進程
+    ahk_proc = subprocess.Popen(
+        [ahk_exe, 'capture_setting.ahk'],
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == 'nt' else 0
+    )
+    print("[*] 熱鍵 F3 已綁定，等待觸發...")
+
+    def cleanup(sig, frame):
+        print("\n[*] 偵測到 Ctrl+C，準備清理...")
+
+        # 終止 AHK 背景腳本
+        if ahk_proc.poll() is None:
+            print("[*] 終止 capture_setting.ahk ...")
+            ahk_proc.terminate()
+
+        sys.exit(0)
+    # 綁定 Ctrl+C 訊號處理
+    signal.signal(signal.SIGINT, cleanup)
+
     Ahk.start_hotkeys()
     print("[*] 熱鍵 F2 已綁定，等待觸發...")
     Ahk.block_forever()
